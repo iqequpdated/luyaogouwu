@@ -1,0 +1,1926 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>璐瑶购物 - 您的专属购物平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background-color: white;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 顶部导航栏样式 */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background-color: white;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: var(--primary-color);
+        }
+
+        .logo i {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+
+        .search-bar {
+            flex: 1;
+            margin: 0 15px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 8px 15px 8px 35px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            background-color: #f8f9fa;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header-icons i {
+            font-size: 18px;
+            color: #555;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .header-icons .fa-bell {
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-link {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* 内容区域样式 */
+        .content {
+            padding-bottom: 70px;
+        }
+
+        .page {
+            display: none;
+            padding: 15px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* 轮播图样式 */
+        .banner {
+            background: linear-gradient(135deg, var(--primary-color), #8e44ad);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* 分类样式 */
+        .categories {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .category {
+            text-align: center;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .category.active {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--primary-color);
+        }
+
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+        }
+
+        .category.active .category-icon {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .category-icon i {
+            font-size: 20px;
+        }
+
+        .category-name {
+            font-size: 12px;
+        }
+
+        /* 产品样式 */
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0 15px;
+            color: var(--dark-color);
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 150px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 10px;
+        }
+
+        .product-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+            font-size: 14px;
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .product-price {
+            color: var(--danger-color);
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* 底部导航样式 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+
+        .nav-item span {
+            font-size: 12px;
+        }
+
+        /* 联系客服样式 */
+        .contact-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .contact-header i {
+            font-size: 40px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .contact-header h2 {
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+
+        .contact-header p {
+            color: #777;
+        }
+
+        .contact-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .contact-method {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .contact-method:hover {
+            transform: translateY(-3px);
+        }
+
+        .contact-method i {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .contact-detail {
+            font-weight: 500;
+            margin: 5px 0;
+        }
+
+        .contact-note {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .online-status {
+            font-size: 12px;
+            color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* 聊天框样式 */
+        .chat-box {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .chat-box.active {
+            display: flex;
+        }
+
+        .chat-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-header i {
+            cursor: pointer;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .message.bot {
+            align-self: flex-start;
+            background-color: #f1f1f1;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            margin-right: 10px;
+        }
+
+        .chat-input button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+        }
+
+        /* 社交联系样式 */
+        .social-contact {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .social-title {
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+
+        .telegram-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #0088cc;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* 常见问题样式 */
+        .faq-list {
+            margin-bottom: 20px;
+        }
+
+        .faq-item {
+            background-color: white;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .faq-answer {
+            padding: 0 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 15px 15px;
+            max-height: 200px;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        /* 用户资料样式 */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+
+        .user-avatar i {
+            font-size: 24px;
+            color: #777;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .user-level {
+            color: var(--warning-color);
+            font-size: 14px;
+        }
+
+        .user-stats {
+            display: flex;
+            justify-content: space-around;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .menu-items {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #f1f1f1;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item i {
+            width: 24px;
+            margin-right: 15px;
+            color: var(--primary-color);
+        }
+
+        /* 管理员申请样式 */
+        .application-form-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .application-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .application-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #eee;
+            z-index: 1;
+        }
+
+        .step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            flex: 1;
+        }
+
+        .step::before {
+            content: '';
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #eee;
+            display: block;
+            margin: 0 auto 8px;
+            line-height: 30px;
+            color: white;
+        }
+
+        .step.active::before {
+            background-color: var(--primary-color);
+            content: '✓';
+        }
+
+        .step:nth-child(1)::before { content: '1'; }
+        .step:nth-child(2)::before { content: '2'; }
+        .step:nth-child(3)::before { content: '3'; }
+
+        .step.active:nth-child(1)::before { content: '1'; }
+        .step.active:nth-child(2)::before { content: '2'; }
+        .step.active:nth-child(3)::before { content: '3'; }
+
+        .application-step {
+            display: none;
+        }
+
+        .application-step.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .verification-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .verification-info i {
+            font-size: 40px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .application-result {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .application-result i {
+            font-size: 50px;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+
+        .application-id {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-family: monospace;
+        }
+
+        .application-notes {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        .application-notes h4 {
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+
+        .application-notes ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .application-notes li {
+            margin-bottom: 8px;
+            padding-left: 0;
+        }
+
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #777;
+        }
+
+        /* 支付选项样式 */
+        .payment-options {
+            padding: 20px;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .payment-option.active {
+            border-color: var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+
+        .payment-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .payment-option.alipay .payment-icon {
+            background-color: #1677ff;
+            color: white;
+        }
+
+        .payment-option.wechat .payment-icon {
+            background-color: #07c160;
+            color: white;
+        }
+
+        .payment-option.kbz .payment-icon {
+            background-color: #ff6b00;
+            color: white;
+        }
+
+        .payment-name {
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+
+        .payment-desc {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .qr-code-section {
+            padding: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .qr-code-section.active {
+            display: block;
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 15px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+
+        .qr-img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .confirm-btn {
+            width: calc(100% - 40px);
+            margin: 20px;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .confirm-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* 认证模态框样式 */
+        .auth-form {
+            padding: 20px;
+        }
+
+        .auth-form .form-group {
+            margin-bottom: 15px;
+        }
+
+        .auth-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* 通知列表样式 */
+        .notifications-list {
+            position: absolute;
+            top: 50px;
+            right: 15px;
+            width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .notifications-list.active {
+            display: block;
+        }
+
+        .notification-item {
+            padding: 15px;
+            border-bottom: 1px solid #f1f1f1;
+            cursor: pointer;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-item.unread {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+
+        .notification-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+
+        .notification-content {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .no-notifications {
+            padding: 20px;
+            text-align: center;
+            color: #999;
+        }
+
+        /* 金色金额样式 */
+        .gold-amount {
+            color: #d4af37;
+            font-weight: bold;
+        }
+
+        /* 闪光效果 */
+        .flash {
+            animation: flash 1.5s infinite;
+        }
+
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+            }
+            
+            .products {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-methods {
+                grid-template-columns: 1fr;
+            }
+            
+            .chat-box {
+                width: calc(100% - 40px);
+                right: 20px;
+                left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+   <div class="app-container">
+        <!-- 顶部导航栏 -->
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-shopping-bag"></i>
+                <span>璐瑶购物</span>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="搜索商品">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="header-icons">
+                <i class="far fa-bell" id="notification-icon">
+                    <span class="notification-badge" id="notification-badge">3</span>
+                </i>
+                <i class="far fa-comment-dots" id="chat-toggle"></i>
+                <a href="admin/login.html" class="admin-link" id="admin-link" title="后台管理">
+                    <i class="fas fa-cog"></i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- 通知列表 -->
+        <div class="notifications-list" id="notifications-list">
+            <div class="notification-item unread">
+                <div class="notification-title">系统通知</div>
+                <div class="notification-content">您的订单 #ORD001 已发货，请注意查收</div>
+                <div class="notification-time">2小时前</div>
+            </div>
+            <div class="notification-item unread">
+                <div class="notification-title">促销活动</div>
+                <div class="notification-content">新用户专享优惠券已发放至您的账户</div>
+                <div class="notification-time">5小时前</div>
+            </div>
+            <div class="notification-item">
+                <div class="notification-title">账户安全</div>
+                <div class="notification-content">您的账户在异地登录，如非本人操作请及时修改密码</div>
+                <div class="notification-time">1天前</div>
+            </div>
+            <div class="notification-item">
+                <div class="notification-title">新品上架</div>
+                <div class="notification-content">iPhone 14 Pro 新品已上架，立即抢购</div>
+                <div class="notification-time">2天前</div>
+            </div>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="content">
+            <!-- 首页 -->
+            <div class="page active" id="home">
+                <div class="banner">
+                    新品上市 限时特惠
+                </div>
+                
+                <div class="categories">
+                    <div class="category active" data-category="all">
+                        <div class="category-icon">
+                            <i class="fas fa-th-large"></i>
+                        </div>
+                        <div class="category-name">全部</div>
+                    </div>
+                    <div class="category" data-category="clothing">
+                        <div class="category-icon">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div class="category-name">服装</div>
+                    </div>
+                    <div class="category" data-category="digital">
+                        <div class="category-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="category-name">数码</div>
+                    </div>
+                    <div class="category" data-category="car">
+                        <div class="category-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="category-name">汽车</div>
+                    </div>
+                </div>
+                
+                <div class="section-title">热门推荐</div>
+                
+                <div class="products" id="product-list">
+                    <!-- 产品将通过JavaScript动态加载 -->
+                </div>
+            </div>
+            
+            <!-- 购物页面 -->
+            <div class="page" id="shopping">
+                <div class="filter-bar">
+                    <div class="filter-option">
+                        综合排序 <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="filter-option">
+                        销量 <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="filter-option">
+                        价格 <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="filter-option">
+                        筛选 <i class="fas fa-filter"></i>
+                    </div>
+                </div>
+                
+                <div class="section-title">全部商品</div>
+                
+                <div class="products" id="shopping-product-list">
+                    <!-- 产品将通过JavaScript动态加载 -->
+                </div>
+            </div>
+            
+            <!-- 联系客服页面 -->
+            <div class="page" id="contact">
+                <div class="contact-header">
+                    <i class="fas fa-paper-plane"></i>
+                    <h2>联系客服</h2>
+                    <p>我们随时为您服务</p>
+                </div>
+                
+                <div class="contact-methods">
+                    <div class="contact-method" onclick="makePhoneCall()">
+                        <i class="fas fa-phone-alt"></i>
+                        <div>电话客服</div>
+                        <div class="contact-detail">09-665596297</div>
+                        <div class="contact-note">点击直接拨打</div>
+                    </div>
+                    <div class="contact-method" onclick="sendEmail()">
+                        <i class="fas fa-envelope"></i>
+                        <div>邮件反馈</div>
+                        <div class="contact-detail">luy56913@gmail.com</div>
+                        <div class="contact-note">点击发送邮件</div>
+                    </div>
+                    <div class="contact-method" id="live-chat-btn">
+                        <i class="fas fa-comments"></i>
+                        <div>在线客服</div>
+                        <div class="contact-detail">立即咨询</div>
+                        <div class="online-status"><span class="status-dot"></span> 在线</div>
+                    </div>
+                    <div class="contact-method">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>服务中心</div>
+                        <div class="contact-detail">查看店位置</div>
+                        <div class="contact-note">全国100+门店</div>
+                    </div>
+                </div>
+
+                <!-- 聊天框 -->
+                <div class="chat-box" id="chat-box">
+                    <div class="chat-header">
+                        <i class="fas fa-robot"></i>
+                        <span>智能客服</span>
+                        <i class="fas fa-times" id="close-chat"></i>
+                    </div>
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message bot">
+                            您好！我是璐瑶购物智能客服，有什么可以帮助您的吗？
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="user-input" placeholder="请输入您的问题...">
+                        <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+                
+                <div class="social-contact">
+                    <div class="social-title">通过Telegram联系店长</div>
+                    <a href="https://t.me/ryh888c" class="telegram-link" target="_blank">
+                        <i class="fab fa-telegram-plane"></i>
+                        @ryh888c
+                    </a>
+                </div>
+                
+                <div class="section-title">常见问题</div>
+                
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            如何查询订单状态？
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            您可以在"我的-我的订单"中查看所有订单的详细状态。
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            退货流程是怎样的？
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            在"我的订单"中选择需要退货的商品，提交退货申请，等待审核通过后按照指引寄回商品。
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            如何修改收货地址？
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            在"我的-地址管理"中可以添加、修改或删除收货地址。
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 我的页面 -->
+            <div class="page" id="profile">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">璐瑶用户</div>
+                        <div class="user-level">黄金会员</div>
+                    </div>
+                    <i class="fas fa-cog"></i>
+                </div>
+                
+                <div class="user-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">待付款</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">待发货</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">2</div>
+                        <div class="stat-label">待收货</div>
+                    </div>
+                </div>
+                
+                <div class="menu-items">
+                    <div class="menu-item">
+                        <i class="far fa-heart"></i>
+                        <span>我的收藏</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="far fa-credit-card"></i>
+                        <span>我的钱包</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-tag"></i>
+                        <span>我的优惠券</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>地址管理</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span>帮助中心</span>
+                    </div>
+                    <div class="menu-item" id="admin-menu-item">
+                        <i class="fas fa-cog"></i>
+                        <span>后台管理</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 管理员申请页面 -->
+            <div class="page" id="admin-apply">
+                <div class="contact-header">
+                    <i class="fas fa-user-shield"></i>
+                    <h2>管理员申请</h2>
+                    <p>申请成为璐瑶购物管理员</p>
+                </div>
+
+                <div class="application-form-container">
+                    <div class="application-steps">
+                        <div class="step active" data-step="1">填写信息</div>
+                        <div class="step" data-step="2">邮箱验证</div>
+                        <div class="step" data-step="3">等待审核</div>
+                    </div>
+
+                    <!-- 步骤1：基本信息 -->
+                    <div class="application-step active" id="step-1">
+                        <div class="form-group">
+                            <label for="apply-username">用户名 *</label>
+                            <input type="text" id="apply-username" placeholder="设置管理员用户名">
+                        </div>
+                        <div class="form-group">
+                            <label for="apply-email">邮箱地址 *</label>
+                            <input type="email" id="apply-email" placeholder="用于接收验证码和通知">
+                        </div>
+                        <div class="form-group">
+                            <label for="apply-password">密码 *</label>
+                            <input type="password" id="apply-password" placeholder="设置管理员密码">
+                        </div>
+                        <div class="form-group">
+                            <label for="apply-reason">申请理由 *</label>
+                            <textarea id="apply-reason" placeholder="请详细说明您申请管理员的理由和经验..." rows="4"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-primary" id="submit-application">提交申请</button>
+                        </div>
+                    </div>
+
+                    <!-- 步骤2：邮箱验证 -->
+                    <div class="application-step" id="step-2">
+                        <div class="verification-info">
+                            <i class="fas fa-envelope"></i>
+                            <h3>邮箱验证</h3>
+                            <p>我们已向 <span id="verify-email"></span> 发送了验证码</p>
+                            <p>请输入收到的6位验证码完成验证</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="verify-code">验证码</label>
+                            <input type="text" id="verify-code" placeholder="输入6位验证码" maxlength="6">
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-secondary" id="resend-code">重新发送</button>
+                            <button class="btn btn-primary" id="verify-email-btn">验证邮箱</button>
+                        </div>
+                    </div>
+
+                    <!-- 步骤3：等待审核 -->
+                    <div class="application-step" id="step-3">
+                        <div class="application-result">
+                            <i class="fas fa-clock"></i>
+                            <h3>申请已提交</h3>
+                            <p>您的管理员申请已提交成功，正在等待审核</p>
+                            <p>我们会在1-3个工作日内通过邮件通知您审核结果</p>
+                            <div class="application-id">
+                                申请ID: <span id="application-id"></span>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-primary" id="back-to-home">返回首页</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="application-notes">
+                    <h4>申请说明：</h4>
+                    <ul>
+                        <li>📧 必须使用真实邮箱，用于接收验证码和审核结果</li>
+                        <li>⏰ 审核周期为1-3个工作日</li>
+                        <li>🔒 通过审核后，您将获得产品管理权限</li>
+                        <li>⚠️ 滥用权限将被永久封禁</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部导航栏 -->
+        <div class="bottom-nav">
+            <div class="nav-item active" data-page="home">
+                <i class="fas fa-home"></i>
+                <span>首页</span>
+            </div>
+            <div class="nav-item" data-page="shopping">
+                <i class="fas fa-shopping-cart"></i>
+                <span>购物</span>
+            </div>
+            <div class="nav-item" data-page="contact">
+                <i class="fas fa-paper-plane"></i>
+                <span>客服</span>
+            </div>
+            <div class="nav-item" data-page="profile">
+                <i class="fas fa-user"></i>
+                <span>我的</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 支付弹窗 -->
+    <div class="modal" id="payment-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">选择支付方式</div>
+                <button class="close-modal">&times;</button>
+            </div>
+            
+            <div class="payment-options">
+                <div class="payment-option alipay" data-payment="alipay">
+                    <div class="payment-icon">
+                        <i class="fab fa-alipay"></i>
+                    </div>
+                    <div class="payment-info">
+                        <div class="payment-name">支付宝支付</div>
+                        <div class="payment-desc">推荐使用支付宝扫码支付</div>
+                    </div>
+                </div>
+                
+                <div class="payment-option wechat" data-payment="wechat">
+                    <div class="payment-icon">
+                        <i class="fab fa-weixin"></i>
+                    </div>
+                    <div class="payment-info">
+                        <div class="payment-name">微信支付</div>
+                        <div class="payment-desc">推荐使用微信扫码支付</div>
+                    </div>
+                </div>
+                
+                <div class="payment-option kbz" data-payment="kbz">
+                    <div class="payment-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="payment-info">
+                        <div class="payment-name">KBZ Pay</div>
+                        <div class="payment-desc">缅甸KBZ银行支付</div>
+                    </div>
+                </div>
+            </div>
+            
+           <!-- 支付宝二维码 -->
+            <div class="qr-code-section" id="alipay-qr">
+                <div class="qr-code">
+                    <img src="fonts/logo/payment/alipay.png" alt="支付宝收款二维码" class="qr-img" data-name="alipay">
+                </div>
+                <p>请使用支付宝扫描上方二维码完成支付，或点击二维码保存到本地</p>
+            </div>
+
+            <!-- 微信二维码 -->
+            <div class="qr-code-section" id="wechat-qr">
+                <div class="qr-code">
+                    <img src="fonts/logo/payment/wechat.png" alt="微信收款二维码" class="qr-img" data-name="wechat">
+                </div>
+                <p>请使用微信扫描上方二维码完成支付，或点击二维码保存到本地</p>
+            </div>
+
+            <!-- KBZ Pay -->
+            <div class="qr-code-section" id="kbz-pay">
+                <div class="qr-code">
+                    <img src="fonts/logo/payment/kbz.png" alt="KBZ Pay 收款二维码" class="qr-img" data-name="kbz">
+                </div>
+                <p>请使用KBZ Pay扫描上方二维码完成支付，或点击二维码保存到本地</p>
+            </div>
+            
+            <button class="confirm-btn" id="confirm-payment" disabled>确认支付</button>
+        </div>
+    </div>
+
+    <!-- 认证弹窗 -->
+    <div class="modal" id="auth-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">管理员认证</div>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="auth-form">
+                <div class="form-group">
+                    <label for="auth-username">管理员账号</label>
+                    <input type="text" id="auth-username" placeholder="请输入管理员账号">
+                </div>
+                <div class="form-group">
+                    <label for="auth-password">密码</label>
+                    <input type="password" id="auth-password" placeholder="请输入管理员密码">
+                </div>
+                <div class="auth-actions">
+                    <button class="btn btn-secondary" id="cancel-auth">取消</button>
+                    <button class="btn btn-primary" id="submit-auth">登录</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 模拟数据
+        const mockData = {
+            products: [
+                { id: 1, name: "iPhone 14 Pro", category: "digital", price: 8999, image: "https://via.placeholder.com/150" },
+                { id: 2, name: "MacBook Pro", category: "digital", price: 12999, image: "https://via.placeholder.com/150" },
+                { id: 3, name: "夏季连衣裙", category: "clothing", price: 299, image: "https://via.placeholder.com/150" },
+                { id: 4, name: "男士衬衫", category: "clothing", price: 199, image: "https://via.placeholder.com/150" },
+                { id: 5, name: "汽车轮胎", category: "car", price: 599, image: "https://via.placeholder.com/150" },
+                { id: 6, name: "无线耳机", category: "digital", price: 399, image: "https://via.placeholder.com/150" }
+            ],
+            notifications: [
+                { id: 1, title: "系统通知", content: "您的订单 #ORD001 已发货，请注意查收", time: "2小时前", read: false },
+                { id: 2, title: "促销活动", content: "新用户专享优惠券已发放至您的账户", time: "5小时前", read: false },
+                { id: 3, title: "账户安全", content: "您的账户在异地登录，如非本人操作请及时修改密码", time: "1天前", read: true },
+                { id: 4, title: "新品上架", content: "iPhone 14 Pro 新品已上架，立即抢购", time: "2天前", read: true }
+            ]
+        };
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化导航
+            initNavigation();
+            
+            // 初始化产品
+            initProducts();
+            
+            // 初始化分类
+            initCategories();
+            
+            // 初始化常见问题
+            initFAQ();
+            
+            // 初始化聊天功能
+            initChat();
+            
+            // 初始化支付功能
+            initPayment();
+            
+            // 初始化通知功能
+            initNotifications();
+            
+            // 初始化管理员认证
+            initAdminAuth();
+            
+            // 初始化管理员申请
+            initAdminApplication();
+        });
+
+        // 初始化导航
+        function initNavigation() {
+            const navItems = document.querySelectorAll('.nav-item[data-page]');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const pageId = this.getAttribute('data-page');
+                    
+                    // 移除所有活动状态
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+                    
+                    // 添加当前活动状态
+                    this.classList.add('active');
+                    document.getElementById(pageId).classList.add('active');
+                });
+            });
+        }
+
+        // 初始化产品
+        function initProducts() {
+            loadProducts('product-list', mockData.products);
+            loadProducts('shopping-product-list', mockData.products);
+        }
+
+        // 加载产品
+        function loadProducts(containerId, products) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price gold-amount">¥${product.price.toLocaleString()}</div>
+                        <div class="product-actions">
+                            <button class="btn btn-outline">
+                                <i class="far fa-heart"></i>
+                                收藏
+                            </button>
+                            <button class="btn btn-primary buy-btn" data-id="${product.id}">
+                                <i class="fas fa-shopping-cart"></i>
+                                购买
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(productCard);
+            });
+            
+            // 添加购买事件
+            document.querySelectorAll('.buy-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const productId = this.getAttribute('data-id');
+                    showPaymentModal(productId);
+                });
+            });
+        }
+
+        // 初始化分类
+        function initCategories() {
+            const categories = document.querySelectorAll('.category');
+            categories.forEach(category => {
+                category.addEventListener('click', function() {
+                    const categoryType = this.getAttribute('data-category');
+                    
+                    // 移除所有活动状态
+                    categories.forEach(cat => cat.classList.remove('active'));
+                    
+                    // 添加当前活动状态
+                    this.classList.add('active');
+                    
+                    // 筛选产品
+                    if (categoryType === 'all') {
+                        loadProducts('product-list', mockData.products);
+                    } else {
+                        const filteredProducts = mockData.products.filter(
+                            product => product.category === categoryType
+                        );
+                        loadProducts('product-list', filteredProducts);
+                    }
+                });
+            });
+        }
+
+        // 初始化常见问题
+        function initFAQ() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', function() {
+                    item.classList.toggle('active');
+                });
+            });
+        }
+
+        // 初始化聊天功能
+        function initChat() {
+            const chatToggle = document.getElementById('live-chat-btn');
+            const closeChat = document.getElementById('close-chat');
+            const chatBox = document.getElementById('chat-box');
+            const sendBtn = document.getElementById('send-btn');
+            const userInput = document.getElementById('user-input');
+            
+            chatToggle.addEventListener('click', function() {
+                chatBox.classList.add('active');
+            });
+            
+            closeChat.addEventListener('click', function() {
+                chatBox.classList.remove('active');
+            });
+            
+            sendBtn.addEventListener('click', sendMessage);
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            function sendMessage() {
+                const message = userInput.value.trim();
+                if (message) {
+                    // 添加用户消息
+                    addMessage(message, 'user');
+                    userInput.value = '';
+                    
+                    // 模拟机器人回复
+                    setTimeout(() => {
+                        let reply = "感谢您的咨询，我们的客服人员会尽快回复您。";
+                        if (message.includes('订单')) {
+                            reply = "您可以在'我的-我的订单'中查看订单状态。";
+                        } else if (message.includes('退货')) {
+                            reply = "退货流程：在'我的订单'中选择商品提交退货申请，审核通过后寄回商品。";
+                        } else if (message.includes('支付')) {
+                            reply = "我们支持支付宝、微信支付和KBZ Pay三种支付方式。";
+                        }
+                        addMessage(reply, 'bot');
+                    }, 1000);
+                }
+            }
+            
+            function addMessage(text, sender) {
+                const messagesContainer = document.getElementById('chat-messages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+                messageDiv.textContent = text;
+                messagesContainer.appendChild(messageDiv);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        }
+
+        // 初始化支付功能
+        function initPayment() {
+            const paymentOptions = document.querySelectorAll('.payment-option');
+            const confirmBtn = document.getElementById('confirm-payment');
+            let selectedPayment = null;
+            
+            paymentOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // 移除所有活动状态
+                    paymentOptions.forEach(opt => opt.classList.remove('active'));
+                    document.querySelectorAll('.qr-code-section').forEach(section => section.classList.remove('active'));
+                    
+                    // 添加当前活动状态
+                    this.classList.add('active');
+                    selectedPayment = this.getAttribute('data-payment');
+                    
+                    // 显示对应的二维码
+                    document.getElementById(`${selectedPayment}-qr`).classList.add('active');
+                    
+                    // 启用确认按钮
+                    confirmBtn.disabled = false;
+                });
+            });
+            
+            confirmBtn.addEventListener('click', function() {
+                alert('支付成功！订单已提交，我们会尽快处理。');
+                document.getElementById('payment-modal').classList.remove('active');
+            });
+            
+            // 关闭模态框
+            document.querySelectorAll('.close-modal').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.modal').classList.remove('active');
+                });
+            });
+        }
+
+        // 显示支付模态框
+        function showPaymentModal(productId) {
+            document.getElementById('payment-modal').classList.add('active');
+        }
+
+        // 初始化通知功能
+        function initNotifications() {
+            const notificationIcon = document.getElementById('notification-icon');
+            const notificationsList = document.getElementById('notifications-list');
+            const notificationBadge = document.getElementById('notification-badge');
+            
+            // 更新未读通知数量
+            const unreadCount = mockData.notifications.filter(n => !n.read).length;
+            notificationBadge.textContent = unreadCount;
+            if (unreadCount === 0) {
+                notificationBadge.style.display = 'none';
+            }
+            
+            notificationIcon.addEventListener('click', function(e) {
+                e.stopPropagation();
+                notificationsList.classList.toggle('active');
+            });
+            
+            // 点击通知项标记为已读
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    if (this.classList.contains('unread')) {
+                        this.classList.remove('unread');
+                        // 更新未读计数
+                        const newUnreadCount = document.querySelectorAll('.notification-item.unread').length;
+                        notificationBadge.textContent = newUnreadCount;
+                        if (newUnreadCount === 0) {
+                            notificationBadge.style.display = 'none';
+                        }
+                    }
+                });
+            });
+            
+            // 点击页面其他区域关闭通知列表
+            document.addEventListener('click', function() {
+                notificationsList.classList.remove('active');
+            });
+        }
+
+        // 初始化管理员认证
+        function initAdminAuth() {
+            const adminLink = document.getElementById('admin-link');
+            const adminMenuItem = document.getElementById('admin-menu-item');
+            const authModal = document.getElementById('auth-modal');
+            const cancelAuth = document.getElementById('cancel-auth');
+            const submitAuth = document.getElementById('submit-auth');
+            
+            // 管理员认证处理
+            function handleAdminAccess(e) {
+                e.preventDefault();
+                authModal.classList.add('active');
+            }
+            
+            adminLink.addEventListener('click', handleAdminAccess);
+            adminMenuItem.addEventListener('click', handleAdminAccess);
+            
+            cancelAuth.addEventListener('click', function() {
+                authModal.classList.remove('active');
+            });
+            
+            submitAuth.addEventListener('click', function() {
+                const username = document.getElementById('auth-username').value;
+                const password = document.getElementById('auth-password').value;
+                
+                // 简单的认证逻辑
+                if (username === 'admin' && password === 'admin123') {
+                    alert('认证成功！正在跳转到后台管理页面...');
+                    window.location.href = 'admin/dashboard.html';
+                } else {
+                    alert('账号或密码错误，请重试！');
+                }
+            });
+        }
+
+        // 初始化管理员申请
+        function initAdminApplication() {
+            const submitApplication = document.getElementById('submit-application');
+            const verifyEmailBtn = document.getElementById('verify-email-btn');
+            const resendCode = document.getElementById('resend-code');
+            const backToHome = document.getElementById('back-to-home');
+            
+            submitApplication.addEventListener('click', function() {
+                const username = document.getElementById('apply-username').value;
+                const email = document.getElementById('apply-email').value;
+                const password = document.getElementById('apply-password').value;
+                const reason = document.getElementById('apply-reason').value;
+                
+                if (!username || !email || !password || !reason) {
+                    alert('请填写所有必填字段！');
+                    return;
+                }
+                
+                // 切换到步骤2
+                document.getElementById('step-1').classList.remove('active');
+                document.getElementById('step-2').classList.add('active');
+                document.querySelector('.step[data-step="1"]').classList.remove('active');
+                document.querySelector('.step[data-step="2"]').classList.add('active');
+                
+                // 显示邮箱
+                document.getElementById('verify-email').textContent = email;
+                
+                // 模拟发送验证码
+                alert('验证码已发送到您的邮箱：' + email);
+            });
+            
+            verifyEmailBtn.addEventListener('click', function() {
+                const code = document.getElementById('verify-code').value;
+                
+                if (!code || code.length !== 6) {
+                    alert('请输入6位验证码！');
+                    return;
+                }
+                
+                // 切换到步骤3
+                document.getElementById('step-2').classList.remove('active');
+                document.getElementById('step-3').classList.add('active');
+                document.querySelector('.step[data-step="2"]').classList.remove('active');
+                document.querySelector('.step[data-step="3"]').classList.add('active');
+                
+                // 生成申请ID
+                const applicationId = 'APP' + Date.now().toString().slice(-6);
+                document.getElementById('application-id').textContent = applicationId;
+            });
+            
+            resendCode.addEventListener('click', function() {
+                alert('验证码已重新发送！');
+            });
+            
+            backToHome.addEventListener('click', function() {
+                // 切换到首页
+                document.querySelector('.nav-item[data-page="home"]').click();
+                
+                // 重置申请表单
+                document.getElementById('apply-username').value = '';
+                document.getElementById('apply-email').value = '';
+                document.getElementById('apply-password').value = '';
+                document.getElementById('apply-reason').value = '';
+                document.getElementById('verify-code').value = '';
+                
+                // 重置步骤
+                document.getElementById('step-1').classList.add('active');
+                document.getElementById('step-2').classList.remove('active');
+                document.getElementById('step-3').classList.remove('active');
+                document.querySelector('.step[data-step="1"]').classList.add('active');
+                document.querySelector('.step[data-step="2"]').classList.remove('active');
+                document.querySelector('.step[data-step="3"]').classList.remove('active');
+            });
+        }
+
+        // 电话和邮件功能
+        function makePhoneCall() {
+            if (confirm('是否拨打客服电话 09-665596297？')) {
+                window.location.href = 'tel:09665596297';
+            }
+        }
+
+        function sendEmail() {
+            window.location.href = 'mailto:luy56913@gmail.com?subject=璐瑶购物咨询&body=您好，我有以下问题需要咨询：';
+        }
+    </script>
+</body>
+</html>

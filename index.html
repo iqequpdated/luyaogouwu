@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>璐瑶购物 - 您的专属购物平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="static/css/user.css">
+    <link rel="stylesheet" href="fonts/fonts.css">
+</head>
+<body>
+   <div class="app-container">
+        <!-- 顶部导航栏 -->
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-shopping-bag"></i>
+                <span>璐瑶购物</span>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="搜索商品">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="header-icons">
+                <i class="far fa-bell" id="notification-icon">
+                    <span class="notification-badge" id="notification-badge">3</span>
+                </i>
+                <i class="far fa-comment-dots" id="chat-toggle"></i>
+                <a href="#" class="admin-link" id="admin-link" title="后台管理">
+                    <i class="fas fa-cog"></i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- 通知列表 -->
+        <div class="notifications-list" id="notifications-list">
+            <div class="notification-item unread">
+                <div class="notification-title">系统通知</div>
+                <div class="notification-content">您的订单 #ORD001 已发货，请注意查收</div>
+                <div class="notification-time">2小时前</div>
+            </div>
+            <div class="notification-item unread">
+                <div class="notification-title">促销活动</div>
+                <div class="notification-content">新用户专享优惠券已发放至您的账户</div>
+                <div class="notification-time">5小时前</div>
+            </div>
+            <div class="notification-item">
+                <div class="notification-title">账户安全</div>
+                <div class="notification-content">您的账户在异地登录，如非本人操作请及时修改密码</div>
+                <div class="notification-time">1天前</div>
+            </div>
+            <div class="notification-item">
+                <div class="notification-title">新品上架</div>
+                <div class="notification-content">iPhone 14 Pro 新品已上架，立即抢购</div>
+                <div class="notification-time">2天前</div>
+            </div>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="content">
+            <!-- 首页 -->
+            <div class="page active" id="home">
+                <div class="banner">
+                    新品上市 限时特惠
+                </div>
+                
+                <div class="categories">
+                    <div class="category active" data-category="all">
+                        <div class="category-icon">
+                            <i class="fas fa-th-large"></i>
+                        </div>
+                        <div class="category-name">全部</div>
+                    </div>
+                    <div class="category" data-category="clothing">
+                        <div class="category-icon">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div class="category-name">服装</div>
+                    </div>
+                    <div class="category" data-category="digital">
+                        <div class="category-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="category-name">数码</div>
+                    </div>
+                    <div class="category" data-category="car">
+                        <div class="category-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="category-name">汽车</div>
+                    </div>
+                </div>
+                
+                <div class="section-title">热门推荐</div>
+                
+                <div class="products" id="product-list">
+                    <!-- 产品将通过JavaScript动态加载 -->
+                </div>
+            </div>
+            
+            <!-- 购物页面 -->
+            <div class="page" id="shopping">
+                <div class="filter-bar">
+                    <div class="filter-option">
+                        综合排序 <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="filter-option">
+                        销量 <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="filter-option">
+                        价格 <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="filter-option">
+                        筛选 <i class="fas fa-filter"></i>
+                    </div>
+                </div>
+                
+                <div class="section-title">全部商品</div>
+                
+                <div class="products" id="shopping-product-list">
+                    <!-- 产品将通过JavaScript动态加载 -->
+                </div>
+            </div>
+            
+            <!-- 联系客服页面 -->
+            <div class="page" id="contact">
+                <div class="contact-header">
+                    <i class="fas fa-paper-plane"></i>
+                    <h2>联系客服</h2>
+                    <p>我们随时为您服务</p>
+                </div>
+                
+                <div class="contact-methods">
+                    <div class="contact-method" onclick="makePhoneCall()">
+                        <i class="fas fa-phone-alt"></i>
+                        <div>电话客服</div>
+                        <div class="contact-detail">09-665596297</div>
+                        <div class="contact-note">点击直接拨打</div>
+                    </div>
+                    <div class="contact-method" onclick="sendEmail()">
+                        <i class="fas fa-envelope"></i>
+                        <div>邮件反馈</div>
+                        <div class="contact-detail">luy56913@gmail.com</div>
+                        <div class="contact-note">点击发送邮件</div>
+                    </div>
+                    <div class="contact-method" id="live-chat-btn">
+                        <i class="fas fa-comments"></i>
+                        <div>在线客服</div>
+                        <div class="contact-detail">立即咨询</div>
+                        <div class="online-status"><span class="status-dot"></span> 在线</div>
+                    </div>
+                    <div class="contact-method">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>服务中心</div>
+                        <div class="contact-detail">查看店位置</div>
+                        <div class="contact-note">全国100+门店</div>
+                    </div>
+                </div>
+
+                <!-- 聊天框 -->
+                <div class="chat-box" id="chat-box">
+                    <div class="chat-header">
+                        <i class="fas fa-robot"></i>
+                        <span>智能客服</span>
+                        <i class="fas fa-times" id="close-chat"></i>
+                    </div>
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message bot">
+                            您好！我是璐瑶购物智能客服，有什么可以帮助您的吗？
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="user-input" placeholder="请输入您的问题...">
+                        <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+                
+                <div class="social-contact">
+                    <div class="social-title">通过Telegram联系店长</div>
+                    <a href="https://t.me/ryh888c" class="telegram-link" target="_blank">
+                        <i class="fab fa-telegram-plane"></i>
+                        @ryh888c
+                    </a>
+                </div>
+                
+                <div class="section-title">常见问题</div>
+                
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            如何查询订单状态？
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            您可以在"我的-我的订单"中查看所有订单的详细状态。
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            退货流程是怎样的？
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            在"我的订单"中选择需要退货的商品，提交退货申请，等待审核通过后按照指引寄回商品。
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            如何修改收货地址？
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            在"我的-地址管理"中可以添加、修改或删除收货地址。
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 我的页面 -->
+            <div class="page" id="profile">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">璐瑶用户</div>
+                        <div class="user-level">黄金会员</div>
+                    </div>
+                    <i class="fas fa-cog"></i>
+                </div>
+                
+                <div class="user-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">待付款</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">待发货</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">2</div>
+                        <div class="stat-label">待收货</div>
+                    </div>
+                </div>
+                
+                <div class="menu-items">
+                    <div class="menu-item">
+                        <i class="far fa-heart"></i>
+                        <span>我的收藏</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="far fa-credit-card"></i>
+                        <span>我的钱包</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-tag"></i>
+                        <span>我的优惠券</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>地址管理</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span>帮助中心</span>
+                    </div>
+                    <div class="menu-item" id="admin-menu-item">
+                        <i class="fas fa-cog"></i>
+                        <span>后台管理</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 管理员申请页面 -->
+            <div class="page" id="admin-apply">
+                <div class="contact-header">
+                    <i class="fas fa-user-shield"></i>
+                    <h2>管理员申请</h2>
+                    <p>申请成为璐瑶购物管理员</p>
+                </div>
+
+                <div class="application-form-container">
+                    <div class="application-steps">
+                        <div class="step active" data-step="1">填写信息</div>
+                        <div class="step" data-step="2">邮箱验证</div>
+                        <div class="step" data-step="3">等待审核</div>
+                    </div>
+
+                    <!-- 步骤1：基本信息 -->
+                    <div class="application-step active" id="step-1">
+                        <div class="form-group">
+                            <label for="apply-username">用户名 *</label>
+                            <input type="text" id="apply-username" placeholder="设置管理员用户名">
+                        </div>
+                        <div class="form-group">
+                            <label for="apply-email">邮箱地址 *</label>
+                            <input type="email" id="apply-email" placeholder="用于接收验证码和通知">
+                        </div>
+                        <div class="form-group">
+                            <label for="apply-password">密码 *</label>
+                            <input type="password" id="apply-password" placeholder="设置管理员密码">
+                        </div>
+                        <div class="form-group">
+                            <label for="apply-reason">申请理由 *</label>
+                            <textarea id="apply-reason" placeholder="请详细说明您申请管理员的理由和经验..." rows="4"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-primary" id="submit-application">提交申请</button>
+                        </div>
+                    </div>
+
+                    <!-- 步骤2：邮箱验证 -->
+                    <div class="application-step" id="step-2">
+                        <div class="verification-info">
+                            <i class="fas fa-envelope"></i>
+                            <h3>邮箱验证</h3>
+                            <p>我们已向 <span id="verify-email"></span> 发送了验证码</p>
+                            <p>请输入收到的6位验证码完成验证</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="verify-code">验证码</label>
+                            <input type="text" id="verify-code" placeholder="输入6位验证码" maxlength="6">
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-secondary" id="resend-code">重新发送</button>
+                            <button class="btn btn-primary" id="verify-email-btn">验证邮箱</button>
+                        </div>
+                    </div>
+
+                    <!-- 步骤3：等待审核 -->
+                    <div class="application-step" id="step-3">
+                        <div class="application-result">
+                            <i class="fas fa-clock"></i>
+                            <h3>申请已提交</h3>
+                            <p>您的管理员申请已提交成功，正在等待审核</p>
+                            <p>我们会在1-3个工作日内通过邮件通知您审核结果</p>
+                            <div class="application-id">
+                                申请ID: <span id="application-id"></span>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-primary" id="back-to-home">返回首页</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="application-notes">
+                    <h4>申请说明：</h4>
+                    <ul>
+                        <li>📧 必须使用真实邮箱，用于接收验证码和审核结果</li>
+                        <li>⏰ 审核周期为1-3个工作日</li>
+                        <li>🔒 通过审核后，您将获得产品管理权限</li>
+                        <li>⚠️ 滥用权限将被永久封禁</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部导航栏 -->
+        <div class="bottom-nav">
+            <div class="nav-item active" data-page="home">
+                <i class="fas fa-home"></i>
+                <span>首页</span>
+            </div>
+            <div class="nav-item" data-page="shopping">
+                <i class="fas fa-shopping-cart"></i>
+                <span>购物</span>
+            </div>
+            <div class="nav-item" data-page="contact">
+                <i class="fas fa-paper-plane"></i>
+                <span>客服</span>
+            </div>
+            <div class="nav-item" data-page="profile">
+                <i class="fas fa-user"></i>
+                <span>我的</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 支付弹窗 -->
+    <div class="modal" id="payment-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">选择支付方式</div>
+                <button class="close-modal">&times;</button>
+            </div>
+            
+            <div class="payment-options">
+                <div class="payment-option alipay" data-payment="alipay">
+                    <div class="payment-icon">
+                        <i class="fab fa-alipay"></i>
+                    </div>
+                    <div class="payment-info">
+                        <div class="payment-name">支付宝支付</div>
+                        <div class="payment-desc">推荐使用支付宝扫码支付</div>
+                    </div>
+                </div>
+                
+                <div class="payment-option wechat" data-payment="wechat">
+                    <div class="payment-icon">
+                        <i class="fab fa-weixin"></i>
+                    </div>
+                    <div class="payment-info">
+                        <div class="payment-name">微信支付</div>
+                        <div class="payment-desc">推荐使用微信扫码支付</div>
+                    </div>
+                </div>
+                
+                <div class="payment-option kbz" data-payment="kbz">
+                    <div class="payment-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="payment-info">
+                        <div class="payment-name">KBZ Pay</div>
+                        <div class="payment-desc">缅甸KBZ银行支付</div>
+                    </div>
+                </div>
+            </div>
+            
+           <!-- 支付宝二维码 -->
+            <div class="qr-code-section" id="alipay-qr">
+                <div class="qr-code">
+                    <img src="../assets/images/alipay.png" alt="支付宝收款二维码" class="qr-img" data-name="alipay">
+                </div>
+                <p>请使用支付宝扫描上方二维码完成支付，或点击二维码保存到本地</p>
+            </div>
+
+            <!-- 微信二维码 -->
+            <div class="qr-code-section" id="wechat-qr">
+                <div class="qr-code">
+                    <img src="../assets/images/wechat.png" alt="微信收款二维码" class="qr-img" data-name="wechat">
+                </div>
+                <p>请使用微信扫描上方二维码完成支付，或点击二维码保存到本地</p>
+            </div>
+
+            <!-- KBZ Pay -->
+            <div class="qr-code-section" id="kbz-pay">
+                <div class="qr-code">
+                    <img src="../assets/images/kbz.png" alt="KBZ Pay 收款二维码" class="qr-img" data-name="kbz">
+                </div>
+                <p>请使用KBZ Pay扫描上方二维码完成支付，或点击二维码保存到本地</p>
+            </div>
+            
+            <button class="confirm-btn" id="confirm-payment" disabled>确认支付</button>
+        </div>
+    </div>
+
+    <!-- 认证弹窗 -->
+    <div class="modal" id="auth-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">管理员认证</div>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="auth-form">
+                <div class="form-group">
+                    <label for="auth-username">管理员账号</label>
+                    <input type="text" id="auth-username" placeholder="请输入管理员账号">
+                </div>
+                <div class="form-group">
+                    <label for="auth-password">密码</label>
+                    <input type="password" id="auth-password" placeholder="请输入管理员密码">
+                </div>
+                <div class="auth-actions">
+                    <button class="btn btn-secondary" id="cancel-auth">取消</button>
+                    <button class="btn btn-primary" id="submit-auth">登录</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="static/js/user.js"></script>
+    <script src="static/js/data.js"></script>
+<script src="fonts/font-loader.js" defer></script>
+</body>
+</html>

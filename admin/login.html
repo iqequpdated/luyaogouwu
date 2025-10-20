@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>璐瑶购物 - 后台登录</title>
+    <link rel="stylesheet" href="../css/admin.css">
+    <style>
+        /* 登录页面专用样式 */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        .login-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, var(--primary-color), #8e44ad);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .logo i {
+            font-size: 32px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .login-header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .login-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+
+        .input-with-icon input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .input-with-icon input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 8px;
+        }
+
+        .forgot-password {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary-color), #8e44ad);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, #2980b9, #7d3c98);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .login-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 480px) {
+            .login-card {
+                border-radius: 10px;
+            }
+            
+            .login-header {
+                padding: 20px 15px;
+            }
+            
+            .login-body {
+                padding: 20px 15px;
+            }
+            
+            .remember-forgot {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .forgot-password {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="logo-text">璐瑶购物</span>
+                </div>
+                <h1>后台管理系统</h1>
+                <p>请输入您的管理员账号和密码</p>
+            </div>
+            
+            <div class="login-body">
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="username">管理员账号</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="username" placeholder="请输入管理员账号" required>
+                        </div>
+                        <div class="error-message" id="username-error">请输入有效的管理员账号</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" placeholder="请输入密码" required>
+                        </div>
+                        <div class="error-message" id="password-error">密码不能为空</div>
+                    </div>
+                    
+                    <div class="remember-forgot">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">记住我</label>
+                        </div>
+                        <a href="#" class="forgot-password">忘记密码？</a>
+                    </div>
+                    
+                    <button type="submit" class="login-btn">登录后台</button>
+                </form>
+                
+                <div class="login-footer">
+                    <p>© 2024 璐瑶购物 版权所有 | <a href="../index.html">返回前台</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('login-form');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const usernameError = document.getElementById('username-error');
+            const passwordError = document.getElementById('password-error');
+            
+            // 表单验证
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                let isValid = true;
+                
+                // 验证用户名
+                if (!usernameInput.value.trim()) {
+                    usernameError.textContent = '请输入管理员账号';
+                    usernameError.classList.add('show');
+                    isValid = false;
+                } else {
+                    usernameError.classList.remove('show');
+                }
+                
+                // 验证密码
+                if (!passwordInput.value.trim()) {
+                    passwordError.textContent = '密码不能为空';
+                    passwordError.classList.add('show');
+                    isValid = false;
+                } else {
+                    passwordError.classList.remove('show');
+                }
+                
+                if (isValid) {
+                    // 模拟登录过程
+                    const loginBtn = document.querySelector('.login-btn');
+                    loginBtn.textContent = '登录中...';
+                    loginBtn.disabled = true;
+                    
+                    // 模拟API调用延迟
+                    setTimeout(function() {
+                        // 简单的认证逻辑
+                        if (usernameInput.value === 'admin' && passwordInput.value === 'admin123') {
+                            // 登录成功
+                            alert('登录成功！正在跳转到后台管理页面...');
+                            window.location.href = 'admin/dashboard.html';
+                        } else {
+                            // 登录失败
+                            alert('账号或密码错误，请重试！');
+                            loginBtn.textContent = '登录后台';
+                            loginBtn.disabled = false;
+                        }
+                    }, 1500);
+                }
+            });
+            
+            // 输入时清除错误提示
+            usernameInput.addEventListener('input', function() {
+                usernameError.classList.remove('show');
+            });
+            
+            passwordInput.addEventListener('input', function() {
+                passwordError.classList.remove('show');
+            });
+            
+            // 检查是否有保存的登录信息
+            if (localStorage.getItem('rememberMe') === 'true') {
+                document.getElementById('remember').checked = true;
+                usernameInput.value = localStorage.getItem('username') || '';
+            }
+            
+            // 记住我功能
+            document.getElementById('remember').addEventListener('change', function() {
+                if (this.checked) {
+                    localStorage.setItem('rememberMe', 'true');
+                } else {
+                    localStorage.setItem('rememberMe', 'false');
+                    localStorage.removeItem('username');
+                }
+            });
+            
+            // 保存用户名
+            usernameInput.addEventListener('blur', function() {
+                if (document.getElementById('remember').checked) {
+                    localStorage.setItem('username', this.value);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
