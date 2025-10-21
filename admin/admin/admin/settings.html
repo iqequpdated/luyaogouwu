@@ -877,107 +877,123 @@
                 // 从localStorage加载设置，如果没有则使用默认值
                 const storedSettings = localStorage.getItem('luyao_settings');
                 if (storedSettings) {
-                    this.currentSettings = JSON.parse(storedSettings);
-                    this.populateForm(this.currentSettings);
+                    try {
+                        this.currentSettings = JSON.parse(storedSettings);
+                        this.populateForm(this.currentSettings);
+                    } catch (error) {
+                        console.error('Error parsing settings:', error);
+                        this.loadDefaultSettings();
+                    }
                 } else {
-                    // 默认设置
-                    this.currentSettings = {
-                        general: {
-                            siteName: '璐瑶购物',
-                            siteUrl: 'https://luyaoshop.com',
-                            siteDescription: '高品质购物平台',
-                            contactEmail: 'admin@luyaoshop.com',
-                            contactPhone: '+86 123 4567 8900',
-                            siteKeywords: '购物,电商,在线商城'
-                        },
-                        system: {
-                            timezone: 'Asia/Shanghai',
-                            language: 'zh-CN',
-                            currency: 'CNY',
-                            dateFormat: 'YYYY-MM-DD',
-                            itemsPerPage: '20',
-                            maintenanceMode: false
-                        },
-                        security: {
-                            sessionTimeout: 30,
-                            passwordMinLength: 8,
-                            passwordRequireUppercase: true,
-                            passwordRequireLowercase: true,
-                            passwordRequireNumbers: true,
-                            passwordRequireSymbols: false,
-                            loginAttemptLimit: true,
-                            maxLoginAttempts: 5,
-                            lockoutDuration: 15
-                        },
-                        email: {
-                            mailerType: 'smtp',
-                            smtpHost: 'smtp.luyaoshop.com',
-                            smtpPort: 587,
-                            smtpUsername: 'noreply@luyaoshop.com',
-                            fromEmail: 'noreply@luyaoshop.com',
-                            fromName: '璐瑶购物',
-                            smtpAuth: true,
-                            smtpSecure: true
-                        },
-                        backup: {
-                            backupFrequency: 'weekly',
-                            backupRetention: 30,
-                            backupDatabase: true,
-                            backupFiles: true
-                        }
-                    };
-                    this.saveSettings();
-                    this.populateForm(this.currentSettings);
+                    this.loadDefaultSettings();
                 }
             }
 
-            // 填充表单
+            // 加载默认设置
+            loadDefaultSettings() {
+                this.currentSettings = {
+                    general: {
+                        siteName: '璐瑶购物',
+                        siteUrl: 'https://luyaoshop.com',
+                        siteDescription: '高品质购物平台',
+                        contactEmail: 'admin@luyaoshop.com',
+                        contactPhone: '+86 123 4567 8900',
+                        siteKeywords: '购物,电商,在线商城'
+                    },
+                    system: {
+                        timezone: 'Asia/Shanghai',
+                        language: 'zh-CN',
+                        currency: 'CNY',
+                        dateFormat: 'YYYY-MM-DD',
+                        itemsPerPage: '20',
+                        maintenanceMode: false
+                    },
+                    security: {
+                        sessionTimeout: 30,
+                        passwordMinLength: 8,
+                        passwordRequireUppercase: true,
+                        passwordRequireLowercase: true,
+                        passwordRequireNumbers: true,
+                        passwordRequireSymbols: false,
+                        loginAttemptLimit: true,
+                        maxLoginAttempts: 5,
+                        lockoutDuration: 15
+                    },
+                    email: {
+                        mailerType: 'smtp',
+                        smtpHost: 'smtp.luyaoshop.com',
+                        smtpPort: 587,
+                        smtpUsername: 'noreply@luyaoshop.com',
+                        fromEmail: 'noreply@luyaoshop.com',
+                        fromName: '璐瑶购物',
+                        smtpAuth: true,
+                        smtpSecure: true
+                    },
+                    backup: {
+                        backupFrequency: 'weekly',
+                        backupRetention: 30,
+                        backupDatabase: true,
+                        backupFiles: true
+                    }
+                };
+                this.saveSettings();
+                this.populateForm(this.currentSettings);
+            }
+
+            // 填充表单 - 修复了undefined错误
             populateForm(settings) {
-                // 基本设置
-                document.getElementById('site-name').value = settings.general.siteName || '';
-                document.getElementById('site-url').value = settings.general.siteUrl || '';
-                document.getElementById('site-description').value = settings.general.siteDescription || '';
-                document.getElementById('contact-email').value = settings.general.contactEmail || '';
-                document.getElementById('contact-phone').value = settings.general.contactPhone || '';
-                document.getElementById('site-keywords').value = settings.general.siteKeywords || '';
+                // 添加安全检查
+                if (!settings) {
+                    console.error('Settings object is undefined, loading defaults');
+                    this.loadDefaultSettings();
+                    return;
+                }
+
+                // 基本设置 - 使用可选链操作符和空值合并
+                document.getElementById('site-name').value = settings.general?.siteName || '';
+                document.getElementById('site-url').value = settings.general?.siteUrl || '';
+                document.getElementById('site-description').value = settings.general?.siteDescription || '';
+                document.getElementById('contact-email').value = settings.general?.contactEmail || '';
+                document.getElementById('contact-phone').value = settings.general?.contactPhone || '';
+                document.getElementById('site-keywords').value = settings.general?.siteKeywords || '';
 
                 // 系统配置
-                document.getElementById('timezone').value = settings.system.timezone || 'Asia/Shanghai';
-                document.getElementById('language').value = settings.system.language || 'zh-CN';
-                document.getElementById('currency').value = settings.system.currency || 'CNY';
-                document.getElementById('date-format').value = settings.system.dateFormat || 'YYYY-MM-DD';
-                document.getElementById('items-per-page').value = settings.system.itemsPerPage || '20';
-                document.getElementById('maintenance-mode').checked = settings.system.maintenanceMode || false;
+                document.getElementById('timezone').value = settings.system?.timezone || 'Asia/Shanghai';
+                document.getElementById('language').value = settings.system?.language || 'zh-CN';
+                document.getElementById('currency').value = settings.system?.currency || 'CNY';
+                document.getElementById('date-format').value = settings.system?.dateFormat || 'YYYY-MM-DD';
+                document.getElementById('items-per-page').value = settings.system?.itemsPerPage || '20';
+                document.getElementById('maintenance-mode').checked = settings.system?.maintenanceMode || false;
 
                 // 安全设置
-                document.getElementById('session-timeout').value = settings.security.sessionTimeout || 30;
-                document.getElementById('password-min-length').value = settings.security.passwordMinLength || 8;
-                document.getElementById('password-require-uppercase').checked = settings.security.passwordRequireUppercase || false;
-                document.getElementById('password-require-lowercase').checked = settings.security.passwordRequireLowercase || false;
-                document.getElementById('password-require-numbers').checked = settings.security.passwordRequireNumbers || false;
-                document.getElementById('password-require-symbols').checked = settings.security.passwordRequireSymbols || false;
-                document.getElementById('login-attempt-limit').checked = settings.security.loginAttemptLimit || false;
-                document.getElementById('max-login-attempts').value = settings.security.maxLoginAttempts || 5;
-                document.getElementById('lockout-duration').value = settings.security.lockoutDuration || 15;
+                document.getElementById('session-timeout').value = settings.security?.sessionTimeout || 30;
+                document.getElementById('password-min-length').value = settings.security?.passwordMinLength || 8;
+                document.getElementById('password-require-uppercase').checked = settings.security?.passwordRequireUppercase || false;
+                document.getElementById('password-require-lowercase').checked = settings.security?.passwordRequireLowercase || false;
+                document.getElementById('password-require-numbers').checked = settings.security?.passwordRequireNumbers || false;
+                document.getElementById('password-require-symbols').checked = settings.security?.passwordRequireSymbols || false;
+                document.getElementById('login-attempt-limit').checked = settings.security?.loginAttemptLimit || false;
+                document.getElementById('max-login-attempts').value = settings.security?.maxLoginAttempts || 5;
+                document.getElementById('lockout-duration').value = settings.security?.lockoutDuration || 15;
 
                 // 启用/禁用相关字段
                 this.toggleLoginAttemptFields();
 
                 // 邮件配置
-                document.getElementById('mailer-type').value = settings.email.mailerType || 'smtp';
-                document.getElementById('smtp-host').value = settings.email.smtpHost || '';
-                document.getElementById('smtp-port').value = settings.email.smtpPort || 587;
-                document.getElementById('smtp-username').value = settings.email.smtpUsername || '';
-                document.getElementById('from-email').value = settings.email.fromEmail || '';
-                document.getElementById('from-name').value = settings.email.fromName || '';
-                document.getElementById('smtp-auth').checked = settings.email.smtpAuth || false;
-                document.getElementById('smtp-secure').checked = settings.email.smtpSecure || false;
+                document.getElementById('mailer-type').value = settings.email?.mailerType || 'smtp';
+                document.getElementById('smtp-host').value = settings.email?.smtpHost || '';
+                document.getElementById('smtp-port').value = settings.email?.smtpPort || 587;
+                document.getElementById('smtp-username').value = settings.email?.smtpUsername || '';
+                document.getElementById('from-email').value = settings.email?.fromEmail || '';
+                document.getElementById('from-name').value = settings.email?.fromName || '';
+                document.getElementById('smtp-auth').checked = settings.email?.smtpAuth || false;
+                document.getElementById('smtp-secure').checked = settings.email?.smtpSecure || false;
 
                 // 备份与恢复
-                document.getElementById('backup-frequency').value = settings.backup.backupFrequency || 'weekly';
-                document.getElementById('backup-retention').value = settings.backup.backupRetention || 30;
-                document.getElementById('backup-database').checked = settings.backup.backupDatabase || false;
-                document.getElementById('backup-files').checked = settings.backup.backupFiles || false;
+                document.getElementById('backup-frequency').value = settings.backup?.backupFrequency || 'weekly';
+                document.getElementById('backup-retention').value = settings.backup?.backupRetention || 30;
+                document.getElementById('backup-database').checked = settings.backup?.backupDatabase || false;
+                document.getElementById('backup-files').checked = settings.backup?.backupFiles || false;
             }
 
             // 保存设置
@@ -1011,20 +1027,20 @@
                         maintenanceMode: document.getElementById('maintenance-mode').checked
                     },
                     security: {
-                        sessionTimeout: parseInt(document.getElementById('session-timeout').value),
-                        passwordMinLength: parseInt(document.getElementById('password-min-length').value),
+                        sessionTimeout: parseInt(document.getElementById('session-timeout').value) || 30,
+                        passwordMinLength: parseInt(document.getElementById('password-min-length').value) || 8,
                         passwordRequireUppercase: document.getElementById('password-require-uppercase').checked,
                         passwordRequireLowercase: document.getElementById('password-require-lowercase').checked,
                         passwordRequireNumbers: document.getElementById('password-require-numbers').checked,
                         passwordRequireSymbols: document.getElementById('password-require-symbols').checked,
                         loginAttemptLimit: document.getElementById('login-attempt-limit').checked,
-                        maxLoginAttempts: parseInt(document.getElementById('max-login-attempts').value),
-                        lockoutDuration: parseInt(document.getElementById('lockout-duration').value)
+                        maxLoginAttempts: parseInt(document.getElementById('max-login-attempts').value) || 5,
+                        lockoutDuration: parseInt(document.getElementById('lockout-duration').value) || 15
                     },
                     email: {
                         mailerType: document.getElementById('mailer-type').value,
                         smtpHost: document.getElementById('smtp-host').value,
-                        smtpPort: parseInt(document.getElementById('smtp-port').value),
+                        smtpPort: parseInt(document.getElementById('smtp-port').value) || 587,
                         smtpUsername: document.getElementById('smtp-username').value,
                         smtpPassword: document.getElementById('smtp-password').value,
                         fromEmail: document.getElementById('from-email').value,
@@ -1034,7 +1050,7 @@
                     },
                     backup: {
                         backupFrequency: document.getElementById('backup-frequency').value,
-                        backupRetention: parseInt(document.getElementById('backup-retention').value),
+                        backupRetention: parseInt(document.getElementById('backup-retention').value) || 30,
                         backupDatabase: document.getElementById('backup-database').checked,
                         backupFiles: document.getElementById('backup-files').checked
                     }
@@ -1211,7 +1227,7 @@
                 localStorage.removeItem('luyao_settings');
                 
                 // 重新加载默认设置
-                this.loadSettings();
+                this.loadDefaultSettings();
                 
                 this.closeModal('reset-settings-modal');
                 this.showNotification('设置已恢复为默认值', 'success');
