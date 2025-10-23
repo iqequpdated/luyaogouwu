@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>用户管理 - 璐瑶购物</title>
+    <style>
+        body{font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;background:#f5f6f8;color:#222;margin:0;padding:20px}
+        .card{max-width:900px;margin:0 auto;background:#fff;padding:16px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.04)}
+        table{width:100%;border-collapse:collapse}
+        th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
+        th{background:#fafafa}
+        .actions{display:flex;gap:8px}
+        .btn{padding:6px 10px;border-radius:6px;border:none;cursor:pointer}
+        .btn-primary{background:#1890ff;color:#fff}
+        .btn-danger{background:#ff4d4f;color:#fff}
+        .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);align-items:center;justify-content:center}
+        .modal.active{display:flex}
+        .modal-content{background:#fff;padding:16px;border-radius:8px;width:400px}
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>用户管理</h2>
+        <div style="margin:12px 0">
+            <button class="btn btn-primary" id="addUserBtn">添加用户</button>
+            <input id="searchUsers" placeholder="搜索用户名或邮箱" style="margin-left:12px;padding:6px;border-radius:6px;border:1px solid #ddd"/>
+        </div>
+        <table id="usersTable">
+            <thead><tr><th>ID</th><th>用户名</th><th>邮箱</th><th>角色</th><th>操作</th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <h3 id="modalTitle">添加用户</h3>
+            <div style="display:flex;flex-direction:column;gap:8px">
+                <input id="userName" placeholder="用户名" />
+                <input id="userEmail" placeholder="邮箱" />
+                <select id="userRole"><option value="user">用户</option><option value="admin">管理员</option></select>
+                <div style="text-align:right;margin-top:8px">
+                    <button class="btn" id="cancelUser">取消</button>
+                    <button class="btn btn-primary" id="saveUser">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function(){
+        const key = 'app_users_v1';
+        let users = JSON.parse(localStorage.getItem(key) || '[]');
+        if(users.length===0){
+            users = [{id:1,name:'admin',email:'admin@example.com',role:'admin'}];
+            localStorage.setItem(key, JSON.stringify(users));
+        }
+
+        function render(){
+            const tbody = document.querySelector('#usersTable tbody');
+            tbody.innerHTML = '';
+            users.forEach(u=>{
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${u.id}</td><td>${u.name}</td><td>${u.email}</td><td>${u.role}</td>
+                    <td class="actions">
+                        <button class="btn" data-id="${u.id}" data-act="edit">编辑</button>
+                        <button class="btn btn-danger" data-id="${u.id}" data-act="del">删除</button>
+                    </td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openModal(editId){
+            const m = document.getElementById('userModal');
+            m.classList.add('active');
+            document.getElementById('modalTitle').textContent = editId ? '编辑用户' : '添加用户';
+            if(editId){
+                const u = users.find(x=>x.id===editId);
+                document.getElementById('userName').value = u.name;
+                document.getElementById('userEmail').value = u.email;
+                document.getElementById('userRole').value = u.role;
+                m.dataset.editId = editId;
+            } else {
+                document.getElementById('userName').value = '';
+                document.getElementById('userEmail').value = '';
+                document.getElementById('userRole').value = 'user';
+                delete m.dataset.editId;
+            }
+        }
+
+        function closeModal(){ document.getElementById('userModal').classList.remove('active'); }
+
+        document.getElementById('addUserBtn').addEventListener('click', ()=>openModal());
+        document.getElementById('cancelUser').addEventListener('click', ()=>closeModal());
+        document.getElementById('saveUser').addEventListener('click', ()=>{
+            const name = document.getElementById('userName').value.trim();
+            const email = document.getElementById('userEmail').value.trim();
+            const role = document.getElementById('userRole').value;
+            if(!name || !email){ alert('请填写用户名和邮箱'); return; }
+            const m = document.getElementById('userModal');
+            const editId = m.dataset.editId ? Number(m.dataset.editId) : null;
+            if(editId){
+                const u = users.find(x=>x.id===editId);
+                u.name = name; u.email = email; u.role = role;
+            } else {
+                const id = users.length? Math.max(...users.map(u=>u.id))+1 : 1;
+                users.push({id,name,email,role});
+            }
+            localStorage.setItem(key, JSON.stringify(users));
+            render();
+            closeModal();
+        });
+
+        document.querySelector('#usersTable tbody').addEventListener('click', (e)=>{
+            const btn = e.target.closest('button');
+            if(!btn) return;
+            const id = Number(btn.dataset.id);
+            const act = btn.dataset.act;
+            if(act === 'edit') openModal(id);
+            if(act === 'del'){ if(confirm('确认删除该用户？')){ users = users.filter(u=>u.id!==id); localStorage.setItem(key, JSON.stringify(users)); render(); } }
+        });
+
+        document.getElementById('searchUsers').addEventListener('input', (e)=>{
+            const q = e.target.value.trim().toLowerCase();
+            const tbody = document.querySelector('#usersTable tbody');
+            tbody.innerHTML = '';
+            users.filter(u=>u.name.toLowerCase().includes(q)||u.email.toLowerCase().includes(q)).forEach(u=>{
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${u.id}</td><td>${u.name}</td><td>${u.email}</td><td>${u.role}</td>
+                    <td class="actions"><button class="btn" data-id="${u.id}" data-act="edit">编辑</button><button class="btn btn-danger" data-id="${u.id}" data-act="del">删除</button></td>`;
+                tbody.appendChild(tr);
+            });
+        });
+
+        render();
+    })();
+    </script>
+</body>
+</html>
